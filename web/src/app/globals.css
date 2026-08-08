@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #08090b;
+  --bg-plane: #0c0d10;
+  --surface: #121319;
+  --surface-2: #191b23;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --text-primary: #f4f5f7;
+  --text-secondary: #a3aab8;
+  --text-muted: #666d7a;
+
+  --brand: #8b6cff;
+  --brand-2: #5be2d8;
+
+  --good: #34d399;
+  --good-dim: rgba(52, 211, 153, 0.14);
+  --warning: #fbbf24;
+  --warning-dim: rgba(251, 191, 36, 0.14);
+  --critical: #f87171;
+  --critical-dim: rgba(248, 113, 113, 0.14);
+  --info: #60a5fa;
+  --info-dim: rgba(96, 165, 250, 0.14);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-plane: var(--bg-plane);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+
+  --color-good: var(--good);
+  --color-good-dim: var(--good-dim);
+  --color-warning: var(--warning);
+  --color-warning-dim: var(--warning-dim);
+  --color-critical: var(--critical);
+  --color-critical-dim: var(--critical-dim);
+  --color-info: var(--info);
+  --color-info-dim: var(--info-dim);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+::selection {
+  background: var(--brand);
+  color: #0a0a0a;
+}
+
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--brand), var(--brand-2) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+.grid-fade {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 90%);
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 90%);
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.45); }
+  100% { box-shadow: 0 0 0 10px rgba(52, 211, 153, 0); }
+}
+.pulse-good {
+  animation: pulse-ring 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes buzz {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-3deg); }
+  40% { transform: rotate(3deg); }
+  60% { transform: rotate(-2deg); }
+  80% { transform: rotate(2deg); }
+}
+.animate-buzz {
+  animation: buzz 0.5s ease-in-out;
+}
