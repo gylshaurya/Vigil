@@ -86,7 +86,7 @@ export default function Home() {
         <div className="relative mx-auto max-w-4xl px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-28">
           <div className="mx-auto mb-7 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium text-text-secondary">
             <span className="pulse-good relative inline-flex h-1.5 w-1.5 rounded-full bg-good" />
-            Live on a local demo chain — give it your key and try to break it
+            Live right now on a public testnet — go try to break it yourself
           </div>
           <h1 className="text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
             Give an attacker your <span className="text-gradient">private key.</span>
