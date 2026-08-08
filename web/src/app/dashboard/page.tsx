@@ -50,11 +50,10 @@ export default function Dashboard() {
   }, [state]);
 
   async function handleVeto(id: number) {
-    if (!deployment) return;
     setBusyId(id);
     setActionError(null);
     try {
-      await vetoAction(deployment, id);
+      await vetoAction(id);
       await refresh();
     } catch (e) {
       setActionError(e instanceof Error ? e.message : "Veto failed");
@@ -64,11 +63,10 @@ export default function Dashboard() {
   }
 
   async function handleExecute(id: number) {
-    if (!deployment) return;
     setBusyId(id);
     setActionError(null);
     try {
-      await executeReadyAction(deployment, id);
+      await executeReadyAction(id);
       await refresh();
     } catch (e) {
       setActionError(e instanceof Error ? e.message : "Execution failed");
@@ -78,12 +76,11 @@ export default function Dashboard() {
   }
 
   async function handleTestTransfer() {
-    if (!deployment) return;
     setBusyId(-1);
     setActionError(null);
     try {
       const wei = BigInt(Math.round(Number(testAmount) * 1e18));
-      await sendTestTransfer(deployment, wei);
+      await sendTestTransfer(wei);
       await refresh();
     } catch (e) {
       setActionError(e instanceof Error ? e.message : "Transfer failed");
@@ -225,14 +222,25 @@ export default function Dashboard() {
 
               <div className="card p-5">
                 <h2 className="text-sm font-semibold text-text-primary">Run the attack</h2>
-                <p className="mt-1 text-[13px] text-text-secondary">From a second terminal, at the repo root:</p>
-                <pre className="mt-3 overflow-x-auto rounded-lg bg-black/40 p-3 font-mono text-[12px] text-text-secondary">
-                  demo/attack.sh
-                </pre>
-                <p className="mt-2 text-[11px] text-text-muted">
-                  Uses the owner&rsquo;s key to try to drain the vault and disable the guard. Both attempts land here as
-                  pending actions for you to veto.
-                </p>
+                {deployment.chainId === 31337 ? (
+                  <>
+                    <p className="mt-1 text-[13px] text-text-secondary">From a second terminal, at the repo root:</p>
+                    <pre className="mt-3 overflow-x-auto rounded-lg bg-black/40 p-3 font-mono text-[12px] text-text-secondary">
+                      demo/attack.sh
+                    </pre>
+                    <p className="mt-2 text-[11px] text-text-muted">
+                      Uses the owner&rsquo;s key to try to drain the vault and disable the guard. Both attempts land
+                      here as pending actions for you to veto.
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-1 text-[13px] text-text-secondary">
+                    This is a live deployment, so the owner key stays on the server rather than in your browser. Any
+                    pending action above is a real, live proposal on this network. Hit VETO and watch it get blocked
+                    for good. To run the full drain attempt yourself with your own funds, clone the repository and
+                    follow the local quickstart in the README.
+                  </p>
+                )}
               </div>
             </section>
 
