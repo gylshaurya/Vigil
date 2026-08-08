@@ -9,7 +9,7 @@ import { PendingActionCard } from "@/components/PendingActionCard";
 import { PhoneToastStack, type PhoneAlert } from "@/components/PhoneToast";
 import { useDeployment } from "@/lib/useDeployment";
 import { useVaultState } from "@/lib/useVaultState";
-import { formatEth, formatDuration, shortAddr, isGuardDisabled } from "@/lib/chain";
+import { formatEth, formatDuration, shortAddr, isGuardDisabled, networkName } from "@/lib/chain";
 import { vetoAction, executeReadyAction, sendTestTransfer } from "@/lib/actions";
 import { describeAction } from "@/lib/describe";
 
@@ -105,7 +105,7 @@ export default function Dashboard() {
               {deployment ? (
                 <>
                   Vault <span className="font-mono text-text-primary">{shortAddr(deployment.vault)}</span> on{" "}
-                  {deployment.chainId === 31337 ? "the local demo chain" : `chain ${deployment.chainId}`}
+                  {networkName(deployment.chainId)}
                 </>
               ) : (
                 "Connecting…"

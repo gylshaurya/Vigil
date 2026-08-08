@@ -1,6 +1,12 @@
 import { createPublicClient, createWalletClient, defineChain, formatEther, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
+export function networkName(chainId: number): string {
+  if (chainId === 31337) return "the local demo chain";
+  if (chainId === 11155111) return "Sepolia";
+  return `chain ${chainId}`;
+}
+
 export function chainFor(d: { chainId: number; rpcUrl: string }) {
   return defineChain({
     id: d.chainId,
