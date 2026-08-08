@@ -2,6 +2,8 @@
 
 Vigil is a smart contract wallet that adds a simple safety check in front of every transfer. Small, everyday payments go through right away. Large or unusual transfers are held for a short waiting period, and a second key can cancel them before they go through. Even turning this protection off has to go through the same waiting period, so a stolen key alone is not enough to empty the wallet.
 
+Live demo: https://vigil-beige-psi.vercel.app, running against a real wallet on the Sepolia test network.
+
 ## The problem this solves
 
 Most wallets are protected by a single private key. If that key is stolen, phished, or leaked, the funds behind it are gone in one transaction. Multi signature wallets fix this by needing several people to approve every transaction, which is safe but slow and annoying for normal spending. Vigil tries a different balance: keep spending fast for normal use, but slow down and add a human check for anything that looks like it could drain the wallet.
@@ -86,20 +88,6 @@ forge test
 
 Eighteen tests cover the instant path, the queue, cancelling, the spending limit, and the recursive protection around the settings themselves.
 
-## Tracks
-
-Built for three tracks of the same hackathon.
-
-**Self Sovereignty**, as the main track. It is a smart contract wallet where losing your everyday key does not mean losing your funds.
-
-**Decentralized Coordination Layers**, as a secondary track. The owner and guardian are a small two person protocol where neither one alone can move funds outside the rules.
-
-**Censorship Resistance**, as a secondary track. Once an action has cleared its delay and was not cancelled, anyone can trigger it. No single person has to stay online to finish a payment that was already approved.
-
 ## Technology used
 
 Solidity and Foundry for the contract, tests, and deployment. OpenZeppelin for the reentrancy guard. Next.js, React, TypeScript, Tailwind CSS, and viem for the dashboard. Plain shell scripts for the demo.
-
-## What is not included
-
-This was built in a single hackathon session, so some things were left out on purpose. There is no support for ERC20 tokens yet, only ETH and raw contract calls. The dashboard notification is a visual stand in for what a real push notification service would send. And the wallet is its own contract rather than being attached to an existing account through something like EIP 7702 or a Safe module, which would be a natural next step.
