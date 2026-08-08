@@ -3,6 +3,11 @@
 deployment.json
 deployment.abi.json
 
+# real testnet keys for the hosted deployment, never commit these
+.secrets/
+.env
+.env.*
+
 # logs
 .anvil.log
 .web-dev.log
@@ -17,3 +22,5 @@ contracts/lib/
 # node
 node_modules/
 web/.next/
+web/AGENTS.md
+web/CLAUDE.md
