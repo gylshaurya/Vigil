@@ -1,21 +1,20 @@
 import { createPublicClient, createWalletClient, defineChain, formatEther, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import type { Deployment } from "./deployment";
 
-export function chainFor(d: Pick<Deployment, "chainId" | "rpcUrl">) {
+export function chainFor(d: { chainId: number; rpcUrl: string }) {
   return defineChain({
     id: d.chainId,
-    name: d.chainId === 31337 ? "Failsafe Local Demo" : `Chain ${d.chainId}`,
+    name: d.chainId === 31337 ? "Vigil Local Demo" : d.chainId === 11155111 ? "Sepolia" : `Chain ${d.chainId}`,
     nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
     rpcUrls: { default: { http: [d.rpcUrl] } },
   });
 }
 
-export function getPublicClient(d: Deployment) {
+export function getPublicClient(d: { chainId: number; rpcUrl: string }) {
   return createPublicClient({ chain: chainFor(d), transport: http(d.rpcUrl) });
 }
 
-export function getWalletClientFor(d: Deployment, privateKey: `0x${string}`) {
+export function getWalletClientFor(d: { chainId: number; rpcUrl: string }, privateKey: `0x${string}`) {
   return createWalletClient({
     account: privateKeyToAccount(privateKey),
     chain: chainFor(d),

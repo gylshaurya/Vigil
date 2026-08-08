@@ -1,52 +1,29 @@
 "use client";
 
-import type { Deployment } from "./deployment";
-import { getPublicClient, getWalletClientFor } from "./chain";
-
-export async function vetoAction(deployment: Deployment, actionId: number): Promise<`0x${string}`> {
-  if (!deployment.guardian.privateKey) {
-    throw new Error("Guardian demo key not available for this network — veto is only wired up for the local demo chain.");
-  }
-  const wallet = getWalletClientFor(deployment, deployment.guardian.privateKey);
-  const publicClient = getPublicClient(deployment);
-  const hash = await wallet.writeContract({
-    address: deployment.vault,
-    abi: deployment.abi,
-    functionName: "veto",
-    args: [BigInt(actionId)],
+async function postJson(url: string, body: unknown): Promise<{ hash: `0x${string}` }> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
-  await publicClient.waitForTransactionReceipt({ hash });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.error ?? `Request to ${url} failed`);
+  }
+  return json;
+}
+
+export async function vetoAction(actionId: number): Promise<`0x${string}`> {
+  const { hash } = await postJson("/api/veto", { actionId });
   return hash;
 }
 
-export async function executeReadyAction(deployment: Deployment, actionId: number): Promise<`0x${string}`> {
-  if (!deployment.guardian.privateKey) {
-    throw new Error("No demo signer available for this network.");
-  }
-  const wallet = getWalletClientFor(deployment, deployment.guardian.privateKey);
-  const publicClient = getPublicClient(deployment);
-  const hash = await wallet.writeContract({
-    address: deployment.vault,
-    abi: deployment.abi,
-    functionName: "executeAction",
-    args: [BigInt(actionId)],
-  });
-  await publicClient.waitForTransactionReceipt({ hash });
+export async function executeReadyAction(actionId: number): Promise<`0x${string}`> {
+  const { hash } = await postJson("/api/execute", { actionId });
   return hash;
 }
 
-export async function sendTestTransfer(deployment: Deployment, toWei: bigint): Promise<`0x${string}`> {
-  if (!deployment.owner.privateKey) {
-    throw new Error("Owner demo key not available for this network.");
-  }
-  const wallet = getWalletClientFor(deployment, deployment.owner.privateKey);
-  const publicClient = getPublicClient(deployment);
-  const hash = await wallet.writeContract({
-    address: deployment.vault,
-    abi: deployment.abi,
-    functionName: "propose",
-    args: [deployment.recipient.address, toWei, "0x"],
-  });
-  await publicClient.waitForTransactionReceipt({ hash });
+export async function sendTestTransfer(amountWei: bigint): Promise<`0x${string}`> {
+  const { hash } = await postJson("/api/test-transfer", { amountWei: amountWei.toString() });
   return hash;
 }
